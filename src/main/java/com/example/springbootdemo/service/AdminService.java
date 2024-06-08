@@ -1,5 +1,6 @@
 package com.example.springbootdemo.service;
 
+import com.example.springbootdemo.common.JwtTokenUtils;
 import com.example.springbootdemo.dao.AdminDao;
 import com.example.springbootdemo.entity.Admin;
 import com.example.springbootdemo.exception.CustomException;
@@ -9,6 +10,7 @@ import com.example.springbootdemo.vo.admin.AdminLoginVO;
 import com.example.springbootdemo.vo.admin.FindAdminBySearchVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +30,8 @@ public class AdminService {
 
     @Resource
     private AdminDao adminDao;
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
 
     /**
      * @return java.util.List<com.example.springbootdemo.entity.User>
@@ -148,6 +152,9 @@ public class AdminService {
             throw new CustomException("登录的用户名或者密码错误");
         }
 
+        //生成token
+        String token = JwtTokenUtils.genToken(adminInfo.getId().toString(), adminInfo.getPassword());
+
         AdminLoginRespVO adminLoginRespVO = new AdminLoginRespVO();
         adminLoginRespVO.setId(adminInfo.getId());
         adminLoginRespVO.setName(adminInfo.getName());
@@ -155,6 +162,11 @@ public class AdminService {
         adminLoginRespVO.setAge(adminInfo.getAge());
         adminLoginRespVO.setSex(adminInfo.getSex());
         adminLoginRespVO.setPhone(adminInfo.getPhone());
+        adminLoginRespVO.setToken(token);
         return adminLoginRespVO;
+    }
+
+    public Admin findById(Integer id) {
+        return adminDao.selectByPrimaryKey(id);
     }
 }
