@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootdemo.dao.BookDao">
+
+    <select id="findBookBySearch" resultType="com.example.springbootdemo.entity.Book">
+        SELECT *
+        FROM book
+        <where>
+            <if test="request.name != null and request.name != ''">
+                AND name LIKE concat('%', #{request.name}, '%')
+            </if>
+            <if test="request.author != null and request.author != ''">
+                AND author LIKE concat('%', #{request.author}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getBookInfoByName" resultType="com.example.springbootdemo.entity.Book">
+        SELECT *
+        FROM book
+        <where>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <insert id="addBookInfo">
+        INSERT INTO book(name, price, author, press)
+        VALUES (#{request.name}, #{request.price}, #{request.author}, #{request.press})
+    </insert>
+
+</mapper>

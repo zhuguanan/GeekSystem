@@ -78,7 +78,7 @@ public class AdminService {
         Admin adminInfo = adminDao.getAdminInfoByName(request.getName());
         if (adminInfo != null) {
             //存在
-            throw new CustomException("改用户名已存在，请勿重复添加");
+            throw new CustomException("该用户名已存在，请勿重复添加");
         }
         Admin admin = new Admin();
         admin.setName(request.getName());
