@@ -55,8 +55,8 @@ public class BookService {
         }
 
         //查询图书是否存在
-        Book adminInfo = bookDao.getBookInfoByName(request.getName());
-        if (adminInfo != null) {
+        Book bookInfo = bookDao.getBookInfoByName(request.getName());
+        if (bookInfo != null) {
             //存在
             throw new CustomException("该图书名称已存在，请勿重复添加");
         }

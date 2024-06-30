@@ -26,9 +26,21 @@ public interface BookDao extends Mapper<Book> {
      */
     List<Book> findBookBySearch(@Param("request") FindBookBySearchVO request);
 
-
+    /**
+     * @param name 图书名称
+     * @return com.example.springbootdemo.entity.Book
+     * @author zhuguannan
+     * @date 2024-06-29
+     * @description: 根据图书名称查询图书信息是否存在
+     */
     Book getBookInfoByName(@Param("name") String name);
 
+    /**
+     * @param book 新增实体
+     * @author zhuguannan
+     * @date 2024-06-29
+     * @description: 新增图书信息
+     */
     void addBookInfo(@Param("request") Book book);
 
 }

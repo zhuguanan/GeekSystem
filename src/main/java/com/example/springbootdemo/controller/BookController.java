@@ -33,8 +33,8 @@ public class BookController {
      */
     @GetMapping("/findBookBySearch")
     public Result findBookBySearch(FindBookBySearchVO request) {
-        PageInfo<Book> adminInfo = bookService.findBookBySearch(request);
-        return Result.success(adminInfo);
+        PageInfo<Book> bookInfo = bookService.findBookBySearch(request);
+        return Result.success(bookInfo);
     }
 
     /**

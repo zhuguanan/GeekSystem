@@ -40,7 +40,7 @@ public interface AdminDao extends Mapper<Admin> {
      * @return com.example.springbootdemo.entity.Admin
      * @author zhuguannan
      * @date 2024-04-21
-     * @description: 更具用户名查询管理员是否存在
+     * @description: 根据用户名查询管理员是否存在
      */
     Admin getAdminInfoByName(@Param("name") String name);
 
@@ -49,7 +49,7 @@ public interface AdminDao extends Mapper<Admin> {
      * @return com.example.springbootdemo.entity.Admin
      * @author zhuguannan
      * @date 2024-04-21
-     * @description: 更具用户名和密码查询管理员是否存在
+     * @description: 根据用户名和密码查询管理员是否存在
      */
     Admin getAdminInfoByNameAndPassword(@Param("request") AdminLoginVO request);
 
