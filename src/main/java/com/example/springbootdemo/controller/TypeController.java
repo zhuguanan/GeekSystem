@@ -9,6 +9,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -80,6 +82,19 @@ public class TypeController {
     @PutMapping("/delBatch")
     public Result delBatch(@RequestBody List<Type> typeList) {
         typeService.delBatch(typeList);
+        return Result.success();
+    }
+
+    /**
+     * @param response 响应消息
+     * @return com.example.springbootdemo.common.Result
+     * @author zhuguannan
+     * @date 2024-07-27
+     * @description: 导出
+     */
+    @GetMapping("/export")
+    public Result export(HttpServletResponse response) throws IOException {
+        typeService.export(response);
         return Result.success();
     }
 }

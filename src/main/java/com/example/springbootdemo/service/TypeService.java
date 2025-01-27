@@ -1,6 +1,10 @@
 package com.example.springbootdemo.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.example.springbootdemo.dao.TypeDao;
 import com.example.springbootdemo.entity.Type;
 import com.example.springbootdemo.exception.CustomException;
@@ -11,7 +15,13 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: zhuguannan
@@ -102,4 +112,41 @@ public class TypeService {
             typeDao.deleteByPrimaryKey(type.getId());
         }
     }
+
+    /**
+     * @param response 响应消息
+     * @author zhuguannan
+     * @date 2024-07-27
+     * @description: 导出
+     */
+    public void export(HttpServletResponse response) throws IOException {
+        //从数据库中查询出所有数据
+        List<Type> typeList = typeDao.selectAll();
+        if (CollectionUtil.isEmpty(typeList)) {
+            throw new CustomException("没有需要导出的数据！");
+        }
+        //定义一个List，存储处理之后的数据，用于将数据处理到list中
+        List<Map<String, Object>> list = new ArrayList<>();
+
+        //定义一个map<key,value>，遍历每一条数据，封装到map<key,value>，将map处理到list中
+        for (Type type : typeList) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("分类名称", type.getName());
+            row.put("分类描述", type.getDescription());
+            list.add(row);
+        }
+
+        //创建一个ExcelWriter，把list数据用writer写出来（生成出来）
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        writer.write(list, true);
+
+        //将Excel下载下来
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=type.xlsx");
+        ServletOutputStream out = response.getOutputStream();
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(System.out);
+    }
+
 }
